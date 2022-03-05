@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "drf_yasg",
     # my apps
     'quiz',
+    'users',
 ]
 
 MIDDLEWARE = [
