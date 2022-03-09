@@ -1,16 +1,12 @@
-from pyexpat import model
+from django.contrib.admin import TabularInline, StackedInline, site
+from super_inlines.admin import SuperInlineModelAdmin, SuperModelAdmin
 from django.contrib import admin
 from .models import Category, Quiz, Question, Answer, Student
 
 
 admin.site.register(Student)
 
-class QuestionInlineModel(admin.TabularInline):
-    model = Question
-    fields = ['title', 'technique', 'difficulty']
-    extra = 2
-    
-class AnswerInlineModel(admin.TabularInline):
+class AnswerInlineModel(SuperInlineModelAdmin, TabularInline):
     model = Answer
     fields = [
         'answer_text', 
@@ -18,13 +14,12 @@ class AnswerInlineModel(admin.TabularInline):
         ]
     extra = 4
     
-# class QuestionLinkInline(admin.TabularInline):
-#     model = Question
-#     # Whichever fields you want: (I usually use only a couple
-#     # needed to identify the entry)
-#     fields = ('title', 'technique', 'difficulty','changeform_link')
-#     readonly_fields = ('changeform_link', )
-#     extra = 1
+class QuestionInlineModel(SuperInlineModelAdmin, StackedInline):
+    model = Question
+    fields = ['title', 'technique', 'difficulty']
+    extra = 1
+    inlines = (AnswerInlineModel,)
+    
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -62,10 +57,11 @@ class QuestionAdmin(admin.ModelAdmin):
         AnswerInlineModel, 
         ]
     
-@admin.register(Answer)
-class AnswerAdmin(admin.ModelAdmin):
-    list_display = [
-        'question_id',
-        'answer_text', 
-        'is_right',
-        ]
+# @admin.register(Answer)
+# class AnswerAdmin(admin.ModelAdmin):
+#     model = Answer
+#     list_display = [
+#         'question_id',
+#         'answer_text', 
+#         'is_right',
+#         ]
