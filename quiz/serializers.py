@@ -11,22 +11,20 @@ class AnswerSerilaizer(serializers.ModelSerializer):
         
         
 class QuestionSerializer(serializers.ModelSerializer):
-    answers = AnswerSerilaizer(many=True, write_only=True)
+    answers = AnswerSerilaizer(many=True, read_only=True)
     quiz_id = serializers.IntegerField(write_only=True, required=False)
     
     class Meta:
         model = Question
-        fields = ('id', 'quiz_name', 'title', 'answers', 'technique', 'difficulty', 'quiz_id')
+        fields = ('id', 'title', 'answers', 'technique', 'difficulty', 'quiz_id')
+    
+    def create(self, validated_data):
+        answers_data = validated_data.pop('answers')
+        questions = Question.objects.create(**validated_data)
+        Answer.objects.create(answers_data=questions, **answers_data)
+        return answers
         
-    # def create(self, validated_data):
-    #     print(validated_data)
-    #     answers_data = validated_data.pop('answers')
-    #     question = Question.objects.create(**validated_data)
-    #     for answer in answers_data:
-    #         answer["question_id"] = question.id
-    #         question.answers.add(Answer.objects.create(**answer))
-    #     question.save()
-    #     return question
+
         
 class QuizSerializer(serializers.ModelSerializer):
     questions = QuestionSerializer(many=True, write_only=True)
@@ -53,4 +51,14 @@ class CategorySerializer(serializers.ModelSerializer):
     
     # def get_name(self, obj):
     #     return obj.name.replace('-', ' ')
+    
+     # def create(self, validated_data):
+    #     print(validated_data)
+    #     answers_data = validated_data.pop('answers')
+    #     question = Question.objects.create(**validated_data)
+    #     for answer in answers_data:
+    #         answer["question_id"] = question.id
+    #         question.answers.add(Answer.objects.create(**answer))
+    #     question.save()
+    #     return question
   
