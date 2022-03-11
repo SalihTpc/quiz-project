@@ -35,4 +35,5 @@ urlpatterns = [
     path('__debug__/', include('debug_toolbar.urls')),
     # apps urls
     path("users/", include("users.urls")),
+    path("category/", include("quiz.urls")),
 ]

@@ -17,7 +17,7 @@ class Quiz(models.Model):
     title = models.CharField(max_length=40)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="quizzes")
     
     def __str__(self):
         return F'{self.title}'
@@ -26,41 +26,29 @@ class Question(models.Model):
     class Meta:
         ordering = ["id"]
     SCALE = (
-        (0, ('Fundamental')),
-        (1, ('Beginner')),
-        (2, ('Intermediate')),
-        (3, ('Advanced')),
-        (4, ('Expert'))
+        (0, gettext_lazy('Fundamental')),
+        (1, gettext_lazy('Beginner')),
+        (2, gettext_lazy('Intermediate')),
+        (3, gettext_lazy('Advanced')),
+        (4, gettext_lazy('Expert'))
     )
     TYPE = (
-        (0, ("Single Choice")),
-        (1, ("Multiple Choice"))
+        (0, gettext_lazy("Single Choice")),
+        (1, gettext_lazy("Multiple Choice"))
     )
-    quiz_name = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name="question")
-    title = models.CharField(max_length=40)
+    quiz_name = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name="questions")
+    title = models.CharField(max_length=255)
     technique = models.IntegerField(choices=TYPE, default=0)
     difficulty = models.IntegerField(choices=SCALE, default=0)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
-    
-    # def changeform_link(self):
-    #     if self.id:
-    #         # Replace "myapp" with the name of the app containing
-    #         # your Certificate model:
-    #         changeform_url = reverse(
-    #             'admin:myapp_certificate_change', args=(self.id,)
-    #         )
-    #         return u'<a href="%s" target="_blank">Details</a>' % changeform_url
-    #     return u''
-    # changeform_link.allow_tags = True
-    # changeform_link.short_description = ''
     
     def __str__(self):
         return f'{self.quiz_name} & {self.title}'
         
     
 class Answer(models.Model):
-    question_id = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answer')
+    question_id = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')
     answer_text = models.CharField(max_length=255)
     is_right = models.BooleanField(default=False)
     updated_date = models.DateTimeField(auto_now=True)
