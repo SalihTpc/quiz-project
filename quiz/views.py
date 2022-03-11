@@ -13,7 +13,7 @@ class CategoryListView(generics.ListAPIView):
 class QuizView(generics.ListAPIView):
     queryset = Quiz.objects.all()
     serializer_class = QuizSerializer
-    
+    permission_classes = (IsStuffOrReadOnly,)
     
     def get_queryset(self):
         category = self.kwargs["category"]
@@ -22,8 +22,6 @@ class QuizView(generics.ListAPIView):
 class QuestionView(generics.ListCreateAPIView):
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
-    permission_classes = (IsStuffOrReadOnly,)
-    
     
     def get_queryset(self):
         quiz = self.kwargs['quiz']

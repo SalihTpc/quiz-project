@@ -16,17 +16,17 @@ class QuestionSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Question
-        fields = ('id', 'quiz_name', 'title', 'technique', 'difficulty', 'answers', 'quiz_id')
+        fields = ('id', 'quiz_name', 'title', 'answers', 'technique', 'difficulty', 'quiz_id')
         
-    def create(self, validated_data):
-        print(validated_data)
-        answers_data = validated_data.pop('answers')
-        question = Question.objects.create(**validated_data)
-        for answer in answers_data:
-            answer["question_id"] = question.id
-            question.answers.add(Answer.objects.create(**answer))
-        question.save()
-        return question
+    # def create(self, validated_data):
+    #     print(validated_data)
+    #     answers_data = validated_data.pop('answers')
+    #     question = Question.objects.create(**validated_data)
+    #     for answer in answers_data:
+    #         answer["question_id"] = question.id
+    #         question.answers.add(Answer.objects.create(**answer))
+    #     question.save()
+    #     return question
         
 class QuizSerializer(serializers.ModelSerializer):
     questions = QuestionSerializer(many=True, write_only=True)
@@ -42,6 +42,7 @@ class QuizSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     quizzes = QuizSerializer(many=True, write_only=True)
     quiz_count = serializers.SerializerMethodField(read_only=True)
+    # name = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Category
@@ -49,3 +50,7 @@ class CategorySerializer(serializers.ModelSerializer):
         
     def get_quiz_count(self, obj):
         return obj.quizzes.count()
+    
+    # def get_name(self, obj):
+    #     return obj.name.replace('-', ' ')
+  
