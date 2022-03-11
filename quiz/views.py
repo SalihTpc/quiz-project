@@ -13,7 +13,7 @@ class CategoryListView(generics.ListAPIView):
 class QuizView(generics.ListAPIView):
     queryset = Quiz.objects.all()
     serializer_class = QuizSerializer
-    permission_classes = (IsStuffOrReadOnly,IsAuthenticated)
+    
     
     def get_queryset(self):
         category = self.kwargs["category"].title().replace(("-"), (" "))
