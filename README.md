@@ -16,4 +16,4 @@ SQL_PORT = 5432
 
 ENV_NAME =
 
-example site = https://quiz-sato.herokuapp.com/
+deployed= https://quiz-sato.herokuapp.com/
