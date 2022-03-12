@@ -1,4 +1,3 @@
-from pyexpat import model
 from rest_framework import serializers
 from .models import Category, Quiz, Question, Answer, Student
         
@@ -40,7 +39,7 @@ class QuizSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     quizzes = QuizSerializer(many=True, write_only=True)
     quiz_count = serializers.SerializerMethodField(read_only=True)
-    # name = serializers.SerializerMethodField(read_only=True)
+
 
     class Meta:
         model = Category
@@ -49,16 +48,3 @@ class CategorySerializer(serializers.ModelSerializer):
     def get_quiz_count(self, obj):
         return obj.quizzes.count()
     
-    # def get_name(self, obj):
-    #     return obj.name.replace('-', ' ')
-    
-     # def create(self, validated_data):
-    #     print(validated_data)
-    #     answers_data = validated_data.pop('answers')
-    #     question = Question.objects.create(**validated_data)
-    #     for answer in answers_data:
-    #         answer["question_id"] = question.id
-    #         question.answers.add(Answer.objects.create(**answer))
-    #     question.save()
-    #     return question
-  
