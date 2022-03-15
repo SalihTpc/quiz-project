@@ -25,5 +25,5 @@ class QuestionView(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
     
     def get_queryset(self):
-        quiz = self.kwargs['quiz'].replace(("-"), (" "))
+        quiz = self.kwargs['quiz'].title().replace(("-"), (" "))
         return Question.objects.filter(quiz_name__title=quiz)
