@@ -1,6 +1,6 @@
 # sample-django
 
-make sure that .env file is created and sample title for .env
+make sure that .env file is created and sample titles below for .env
 
 SECRET_KEY=
 
